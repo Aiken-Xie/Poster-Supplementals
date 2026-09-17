@@ -58,33 +58,33 @@
             Your browser cannot play this video. Download the
             <a id="movie-download-fallback" href="../assets/movies/heat-conduction-logical-rescaled.mp4">selected movie</a>.
           </video>
-          <figcaption>
-            <h3 id="movie-title">Logical θ/u and along-device view</h3>
-            <p id="movie-description">The left panel retains the diagnostic’s logical poloidal coordinates, making grid and field-surface alignment easier to inspect.</p>
-            <p class="movie-scale" id="movie-scale" aria-live="polite">Colorbar rescaled to each frame's peak.</p>
-          </figcaption>
         </figure>
       </section>
     </main>
     <script>
       const movies = {
         "physical-rz": {
-          title: "Physical R/Z and along-device view",
-          description: "The left panel maps the η-plane into physical R/Z coordinates; the right panel follows the temperature perturbation along the device.",
           preview: "../assets/previews/heat-conduction-physical-rz.png",
+          portraitPreview: "../assets/previews/heat-conduction-physical-rz-portrait.png",
+          rescaledPortraitPreview: "../assets/previews/heat-conduction-physical-rz-rescaled-portrait.png",
           fixed: "../assets/movies/heat-conduction-physical-rz.mp4",
           rescaled: "../assets/movies/heat-conduction-physical-rz-rescaled.mp4",
+          fixedPortrait: "../assets/movies/heat-conduction-physical-rz-portrait.mp4",
+          rescaledPortrait: "../assets/movies/heat-conduction-physical-rz-rescaled-portrait.mp4",
         },
         logical: {
-          title: "Logical θ/u and along-device view",
-          description: "The left panel retains the diagnostic’s logical poloidal coordinates, making grid and field-surface alignment easier to inspect.",
           preview: "../assets/previews/heat-conduction-logical.png",
+          portraitPreview: "../assets/previews/heat-conduction-logical-portrait.png",
+          rescaledPortraitPreview: "../assets/previews/heat-conduction-logical-rescaled-portrait.png",
           fixed: "../assets/movies/heat-conduction-logical.mp4",
           rescaled: "../assets/movies/heat-conduction-logical-rescaled.mp4",
+          fixedPortrait: "../assets/movies/heat-conduction-logical-portrait.mp4",
+          rescaledPortrait: "../assets/movies/heat-conduction-logical-rescaled-portrait.mp4",
         },
       };
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const mobileDisplay = window.matchMedia("(max-width: 42rem)");
       const view = document.querySelector("#movie-view");
       const fixedColorbar = document.querySelector("#fixed-colorbar");
       const movie = document.querySelector("#heat-movie");
@@ -93,15 +93,15 @@
 
       function updateMovie() {
         const selected = movies[view.value];
-        const url = selected[fixedColorbar.checked ? "fixed" : "rescaled"];
+        const portrait = mobileDisplay.matches;
+        const url = selected[portrait
+          ? (fixedColorbar.checked ? "fixedPortrait" : "rescaledPortrait")
+          : (fixedColorbar.checked ? "fixed" : "rescaled")];
         source.src = url;
-        movie.poster = selected.preview;
+        movie.poster = portrait
+          ? (fixedColorbar.checked ? selected.portraitPreview : selected.rescaledPortraitPreview)
+          : selected.preview;
         fallback.href = url;
-        document.querySelector("#movie-title").textContent = selected.title;
-        document.querySelector("#movie-description").textContent = selected.description;
-        document.querySelector("#movie-scale").textContent = fixedColorbar.checked
-          ? "Colorbar fixed to the run-global initial peak."
-          : "Colorbar rescaled to each frame's peak.";
         movie.load();
         if (!reduceMotion) {
           movie.addEventListener("loadeddata", () => movie.play().catch(() => {}), { once: true });
@@ -110,10 +110,12 @@
 
       view.addEventListener("change", updateMovie);
       fixedColorbar.addEventListener("change", updateMovie);
+      mobileDisplay.addEventListener("change", updateMovie);
       if (reduceMotion) {
         movie.autoplay = false;
         movie.pause();
       }
+      updateMovie();
     </script>
   </body>
 </html>
