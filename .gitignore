@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+
+# Keep local render masters and raw exports out of the public web repository.
+source-media/
+*.mov
