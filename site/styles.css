@@ -262,12 +262,7 @@ main { padding-block: clamp(2.5rem, 6vw, 5rem); }
   background: #000;
 }
 
-.movie-card {
-  margin: 0;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--ink);
-  background: transparent;
-}
+.movie-card { margin: 0; background: transparent; }
 
 .movie-card video {
   display: block;
@@ -283,6 +278,36 @@ main { padding-block: clamp(2.5rem, 6vw, 5rem); }
 .movie-card h3 { margin-top: 0; }
 
 .movie-card p { margin: 0; color: var(--muted); }
+
+.movie-section--production { margin-inline: calc(50% - 50vw); }
+
+.movie-section--production > .movie-controls,
+.movie-section--production > .movie-hero figcaption {
+  width: min(100% - 2rem, 64rem);
+  margin-left: clamp(1rem, 5vw, 4rem);
+  margin-right: auto;
+}
+
+.movie-section--production > .movie-controls { margin-bottom: 1.5rem; }
+
+.movie-hero { width: 100%; margin: 0; }
+
+.movie-hero video { display: block; width: 100%; max-height: calc(100vh - 4rem); background: #000; }
+
+.movie-hero figcaption { padding: 0 0 1rem; }
+
+.movie-hero h3 { margin: 0 0 .35rem; }
+
+.movie-hero p { margin: 0; color: var(--muted); }
+
+.movie-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 7vw, 5rem);
+  margin-top: clamp(3rem, 8vw, 6rem);
+}
+
+.movie-stack .movie-card video { width: 100%; }
 
 @media (max-width: 38rem) {
   .boundary-conditions div + div {

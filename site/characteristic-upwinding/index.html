@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Supplemental six-field DRBX movie: full model evolution with characteristic upwinding."
+    />
+    <title>Full Model Evolution with Characteristic Upwinding · DRBX</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header site-header--compact">
+      <div class="page-width">
+        <a class="back-link" href="../">← All supplemental videos</a>
+        <h1>Full model evolution with characteristic upwinding</h1>
+      </div>
+    </header>
+    <main class="page-width page-content">
+      <section class="experiment-summary" aria-labelledby="run-heading">
+        <p class="eyebrow eyebrow--dark">HSX DRBX no-flow run</p>
+        <h2 id="run-heading">Full drift-reduced Braginskii model time evolution</h2>
+      </section>
+
+      <section class="movie-section movie-section--production" aria-label="Characteristic-upwinding production movie">
+        <div class="movie-controls" aria-label="Movie display options">
+          <label class="colorbar-toggle" for="fixed-colorbar">
+            <input id="fixed-colorbar" name="fixed-colorbar" type="checkbox" />
+            <span>Fix colorbar</span>
+          </label>
+        </div>
+
+        <figure class="movie-hero">
+          <figcaption>
+            <p>
+              Density (<i>n</i>), electron temperature (<i>T</i><sub>e</sub>), ion temperature (<i>T</i><sub>i</sub>), ion parallel velocity (<i>V</i><sub>i</sub>), electron parallel velocity (<i>V</i><sub>e</sub>), and vorticity (<i>&omega;</i>).
+            </p>
+          </figcaption>
+          <video id="overview-movie" controls playsinline loop muted preload="metadata" poster="../assets/previews/characteristic-upwinding-48-overview.png">
+            <source id="overview-movie-source" src="../assets/movies/characteristic-upwinding-48-overview-rescaled.mp4" type="video/mp4" />
+            Your browser cannot play this video. Download the
+            <a id="overview-download" href="../assets/movies/characteristic-upwinding-48-overview-rescaled.mp4">six-field overview</a>.
+          </video>
+        </figure>
+      </section>
+    </main>
+    <script>
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const fixedColorbar = document.querySelector("#fixed-colorbar");
+      const movie = {
+        video: document.querySelector("#overview-movie"),
+        source: document.querySelector("#overview-movie-source"),
+        download: document.querySelector("#overview-download"),
+        fixed: "../assets/movies/characteristic-upwinding-48-overview-fixed.mp4",
+        rescaled: "../assets/movies/characteristic-upwinding-48-overview-rescaled.mp4",
+      };
+
+      function updateMovie() {
+        const url = fixedColorbar.checked ? movie.fixed : movie.rescaled;
+        movie.source.src = url;
+        movie.download.href = url;
+        movie.video.load();
+        if (!reduceMotion) {
+          movie.video.addEventListener("loadeddata", () => movie.video.play().catch(() => {}), { once: true });
+        }
+      }
+
+      fixedColorbar.addEventListener("change", updateMovie);
+      if (reduceMotion) {
+        movie.video.autoplay = false;
+        movie.video.pause();
+      }
+      updateMovie();
+    </script>
+  </body>
+</html>
